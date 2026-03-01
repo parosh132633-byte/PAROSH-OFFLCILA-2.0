@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD PAROSH | SYSTEM_OVERRIDE v4.0</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { background-color: #050505; color: #00ff41; font-family: monospace; }
+        .section { display: none; padding-top: 100px; }
+        .active { display: block; }
+        .btn-glow:hover { box-shadow: 0 0 15px #00ff41; }
+        .msg-box { background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.2); }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed w-full top-0 bg-black/90 border-b border-cyber/20 p-4 z-50 flex justify-between items-center">
+        <div class="font-bold text-lg">PAROSH_ROOT://</div>
+        <div class="flex gap-4 text-xs font-bold">
+            <button onclick="nav('home')" class="hover:text-white">HOME</button>
+            <button onclick="nav('msg')" class="hover:text-white">MESSAGE</button>
+            <button onclick="login()" class="text-red-500 border border-red-500 px-2 py-1 rounded">ADMIN_LOGIN</button>
+        </div>
+    </nav>
+
+    <div id="home" class="section active container mx-auto px-6 text-center">
+        <h1 class="text-5xl font-black mb-4 uppercase">MD PAROSH</h1>
+        <p class="text-white text-xl mb-10">> ETHICAL HACKER & DEV</p>
+        <p class="text-gray-400">School: Khirshin S.K High School</p>
+        <p class="text-gray-400">Phone: 01323614030</p>
+        
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="msg-box p-6 rounded">SYSTEM SECURE</div>
+            <div class="msg-box p-6 rounded text-white">PENETRATION TEST</div>
+            <div class="msg-box p-6 rounded">DATA ENCRYPTION</div>
+        </div>
+    </div>
+
+    <div id="msg" class="section container mx-auto px-6 max-w-lg">
+        <div class="msg-box p-8 rounded-xl border-2 border-green-500">
+            <h2 class="text-2xl font-bold mb-6 text-center">SEND ENCRYPTED MESSAGE</h2>
+            <input type="text" id="user" placeholder="Your Alias (Name)" class="w-full bg-black border border-green-900 p-3 mb-4 rounded outline-none text-green-400">
+            <textarea id="text" placeholder="Enter Secret Message..." class="w-full bg-black border border-green-900 p-3 mb-4 rounded outline-none text-green-400" rows="5"></textarea>
+            <button onclick="saveMsg()" class="w-full bg-green-600 text-black font-bold py-3 rounded btn-glow">TRANSMIT DATA</button>
+        </div>
+    </div>
+
+    <div id="admin" class="section container mx-auto px-6">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-bold text-red-500 uppercase italic">Intercepted Logs</h2>
+            <button onclick="clearData()" class="bg-red-600 text-white px-4 py-2 rounded text-xs">WIPE ALL DATA</button>
+        </div>
+        <div id="logList" class="space-y-4">
+            </div>
+    </div>
+
+    <script>
+        // Navigation Logic
+        function nav(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Save Message to LocalStorage
+        function saveMsg() {
+            const user = document.getElementById('user').value;
+            const text = document.getElementById('text').value;
+            const time = new Date().toLocaleString();
+
+            if(!user || !text) return Swal.fire('Error', 'Incomplete data.', 'error');
+
+            const database = JSON.parse(localStorage.getItem('parosh_logs') || '[]');
+            database.push({ user, text, time });
+            localStorage.setItem('parosh_logs', JSON.stringify(database));
+
+            Swal.fire('Success', 'Message Sent to Admin Panel!', 'success');
+            document.getElementById('user').value = '';
+            document.getElementById('text').value = '';
+        }
+
+        // Admin Login
+        function login() {
+            Swal.fire({
+                title: 'ADMIN ACCESS',
+                input: 'password',
+                inputPlaceholder: 'Enter Security Key',
+                showCancelButton: true,
+                confirmButtonColor: '#00ff41',
+                confirmButtonText: 'BYPASS'
+            }).then((res) => {
+                // পাসওয়ার্ড এখানে দেওয়া হলো
+                if(res.value === 'parosh123') {
+                    nav('admin');
+                    showLogs();
+                } else if(res.isConfirmed) {
+                    Swal.fire('Denied', 'Invalid Key!', 'error');
+                }
+            });
+        }
+
+        // Show Logs in Admin Panel
+        function showLogs() {
+            const list = document.getElementById('logList');
+            const data = JSON.parse(localStorage.getItem('parosh_logs') || '[]');
+            list.innerHTML = data.length ? '' : '<p class="text-center text-gray-600">NO DATA FOUND.</p>';
+            
+            data.reverse().forEach(m => {
+                list.innerHTML += `
+                    <div class="p-4 bg-zinc-900 border-l-4 border-red-500 rounded">
+                        <div class="text-xs text-red-400 font-bold uppercase mb-1">From: ${m.user} | ${m.time}</div>
+                        <div class="text-white text-sm italic">${m.text}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Wipe Data
+        function clearData() {
+            localStorage.removeItem('parosh_logs');
+            showLogs();
+        }
+    </script>
+</body>
+</html>
