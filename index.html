@@ -1,129 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MD PAROSH | SYSTEM_OVERRIDE v4.0</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <title>MD PAROSH | Professional Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #050505; color: #00ff41; font-family: monospace; }
-        .section { display: none; padding-top: 100px; }
-        .active { display: block; }
-        .btn-glow:hover { box-shadow: 0 0 15px #00ff41; }
-        .msg-box { background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.2); }
+        :root {
+            --primary-color: #38bdf8;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: var(--text-light); }
+
+        /* Navigation */
+        nav { position: fixed; top: 0; width: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 20px 0; z-index: 1000; border-bottom: 1px solid #334155; }
+        .nav-content { max-width: 1100px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+        .nav-links a { color: var(--text-light); text-decoration: none; margin-left: 25px; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary-color); }
+
+        /* Hero Section */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); padding-top: 80px; }
+        .profile-pic { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 6px solid var(--primary-color); margin-bottom: 25px; box-shadow: 0 0 30px rgba(56, 189, 248, 0.3); }
+        .hero h1 { font-size: 4rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.5rem; color: var(--text-dim); margin-bottom: 30px; }
+        .btn { padding: 12px 30px; background: var(--primary-color); color: #000; text-decoration: none; border-radius: 5px; font-weight: 700; transition: 0.3s; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary-color); }
+
+        /* Section Styling */
+        .container { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 10px; }
+        .section-title div { width: 60px; height: 4px; background: var(--primary-color); margin: auto; }
+
+        /* Grid Layout for Services/Projects */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 15px; transition: 0.3s; border: 1px solid #334155; }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+        .card h3 { margin-bottom: 15px; color: var(--primary-color); }
+
+        /* Skills Section */
+        .skills-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .skill-tag { background: #334155; padding: 10px 25px; border-radius: 50px; font-weight: 600; border: 1px solid transparent; transition: 0.3s; }
+        .skill-tag:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+        /* Contact Section */
+        .contact-box { text-align: center; background: var(--card-bg); padding: 50px; border-radius: 20px; }
+        .social-links { margin-top: 30px; }
+        .social-links a { display: inline-block; margin: 0 15px; color: var(--text-light); font-size: 1.2rem; text-decoration: none; border: 1px solid var(--text-dim); padding: 10px 20px; border-radius: 8px; transition: 0.3s; }
+        .social-links a:hover { background: var(--primary-color); color: #000; border-color: var(--primary-color); }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid #334155; margin-top: 100px; color: var(--text-dim); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* মোবাইলে মেনু হাইড রাখা হয়েছে সহজ করার জন্য */
+        }
     </style>
 </head>
 <body>
 
-    <nav class="fixed w-full top-0 bg-black/90 border-b border-cyber/20 p-4 z-50 flex justify-between items-center">
-        <div class="font-bold text-lg">PAROSH_ROOT://</div>
-        <div class="flex gap-4 text-xs font-bold">
-            <button onclick="nav('home')" class="hover:text-white">HOME</button>
-            <button onclick="nav('msg')" class="hover:text-white">MESSAGE</button>
-            <button onclick="login()" class="text-red-500 border border-red-500 px-2 py-1 rounded">ADMIN_LOGIN</button>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">MD PAROSH</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
         </div>
     </nav>
 
-    <div id="home" class="section active container mx-auto px-6 text-center">
-        <h1 class="text-5xl font-black mb-4 uppercase">MD PAROSH</h1>
-        <p class="text-white text-xl mb-10">> ETHICAL HACKER & DEV</p>
-        <p class="text-gray-400">School: Khirshin S.K High School</p>
-        <p class="text-gray-400">Phone: 01323614030</p>
-        
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div class="msg-box p-6 rounded">SYSTEM SECURE</div>
-            <div class="msg-box p-6 rounded text-white">PENETRATION TEST</div>
-            <div class="msg-box p-6 rounded">DATA ENCRYPTION</div>
-        </div>
-    </div>
+    <header class="hero" id="home">
+        <img src="my_photo.jpg" alt="MD PAROSH" class="profile-pic">
+        <h1>I am MD PAROSH</h1>
+        <p>Entrepreneur | Developer | Creative Thinker</p>
+        <a href="#contact" class="btn">Hire Me</a>
+    </header>
 
-    <div id="msg" class="section container mx-auto px-6 max-w-lg">
-        <div class="msg-box p-8 rounded-xl border-2 border-green-500">
-            <h2 class="text-2xl font-bold mb-6 text-center">SEND ENCRYPTED MESSAGE</h2>
-            <input type="text" id="user" placeholder="Your Alias (Name)" class="w-full bg-black border border-green-900 p-3 mb-4 rounded outline-none text-green-400">
-            <textarea id="text" placeholder="Enter Secret Message..." class="w-full bg-black border border-green-900 p-3 mb-4 rounded outline-none text-green-400" rows="5"></textarea>
-            <button onclick="saveMsg()" class="w-full bg-green-600 text-black font-bold py-3 rounded btn-glow">TRANSMIT DATA</button>
-        </div>
-    </div>
-
-    <div id="admin" class="section container mx-auto px-6">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="text-3xl font-bold text-red-500 uppercase italic">Intercepted Logs</h2>
-            <button onclick="clearData()" class="bg-red-600 text-white px-4 py-2 rounded text-xs">WIPE ALL DATA</button>
-        </div>
-        <div id="logList" class="space-y-4">
+    <div class="container">
+        <section id="about">
+            <div class="section-title">
+                <h2>About Me</h2>
+                <div></div>
             </div>
+            <p style="text-align: center; max-width: 800px; margin: auto; font-size: 1.1rem; color: var(--text-dim);">
+                হ্যালো! আমি MD PAROSH। আমি একজন স্বপ্নদ্রষ্টা এবং প্রযুক্তিপ্রেমী। আমার লক্ষ্য হলো আধুনিক প্রযুক্তির মাধ্যমে মানুষের জীবনকে সহজ করা। আমি দীর্ঘ সময় ধরে বিভিন্ন প্রজেক্টে কাজ করছি এবং সবসময় নতুন চ্যালেঞ্জ গ্রহণ করতে পছন্দ করি।
+            </p>
+        </section>
+
+        <section id="services" style="margin-top: 100px;">
+            <div class="section-title">
+                <h2>My Services</h2>
+                <div></div>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Web Development</h3>
+                    <p>আধুনিক এবং রেসপন্সিভ ওয়েবসাইট তৈরি করি যা আপনার বিজনেসকে অনলাইনে এগিয়ে রাখবে।</p>
+                </div>
+                <div class="card">
+                    <h3>Graphic Design</h3>
+                    <p>ব্র্যান্ড লোগো, ব্যানার এবং সোশ্যাল মিডিয়া পোস্টের জন্য ক্রিয়েটিভ ডিজাইন প্রদান করি।</p>
+                </div>
+                <div class="card">
+                    <h3>Digital Marketing</h3>
+                    <p>আপনার প্রোজেক্ট বা বিজনেসকে সঠিক মানুষের কাছে পৌঁছে দিতে আমি কাজ করি।</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" style="margin-top: 100px;">
+            <div class="section-title">
+                <h2>My Skills</h2>
+                <div></div>
+            </div>
+            <div class="skills-container">
+                <div class="skill-tag">JavaScript</div>
+                <div class="skill-tag">React.js</div>
+                <div class="skill-tag">Python</div>
+                <div class="skill-tag">Photoshop</div>
+                <div class="skill-tag">SEO</div>
+                <div class="skill-tag">Public Speaking</div>
+            </div>
+        </section>
+
+        <section id="contact" style="margin-top: 100px;">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+                <div></div>
+            </div>
+            <div class="contact-box">
+                <p>আপনার মাথায় কোনো নতুন আইডিয়া আছে? চলুন একসাথে কাজ করি!</p>
+                <div class="social-links">
+                    <a href="mailto:parosh@email.com">Email Me</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <script>
-        // Navigation Logic
-        function nav(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+    <footer>
+        <p>&copy; 2026 MD PAROSH. All Rights Reserved.</p>
+        <p>Built with Passion for MD PAROSH.</p>
+    </footer>
 
-        // Save Message to LocalStorage
-        function saveMsg() {
-            const user = document.getElementById('user').value;
-            const text = document.getElementById('text').value;
-            const time = new Date().toLocaleString();
-
-            if(!user || !text) return Swal.fire('Error', 'Incomplete data.', 'error');
-
-            const database = JSON.parse(localStorage.getItem('parosh_logs') || '[]');
-            database.push({ user, text, time });
-            localStorage.setItem('parosh_logs', JSON.stringify(database));
-
-            Swal.fire('Success', 'Message Sent to Admin Panel!', 'success');
-            document.getElementById('user').value = '';
-            document.getElementById('text').value = '';
-        }
-
-        // Admin Login
-        function login() {
-            Swal.fire({
-                title: 'ADMIN ACCESS',
-                input: 'password',
-                inputPlaceholder: 'Enter Security Key',
-                showCancelButton: true,
-                confirmButtonColor: '#00ff41',
-                confirmButtonText: 'BYPASS'
-            }).then((res) => {
-                // পাসওয়ার্ড এখানে দেওয়া হলো
-                if(res.value === 'parosh123') {
-                    nav('admin');
-                    showLogs();
-                } else if(res.isConfirmed) {
-                    Swal.fire('Denied', 'Invalid Key!', 'error');
-                }
-            });
-        }
-
-        // Show Logs in Admin Panel
-        function showLogs() {
-            const list = document.getElementById('logList');
-            const data = JSON.parse(localStorage.getItem('parosh_logs') || '[]');
-            list.innerHTML = data.length ? '' : '<p class="text-center text-gray-600">NO DATA FOUND.</p>';
-            
-            data.reverse().forEach(m => {
-                list.innerHTML += `
-                    <div class="p-4 bg-zinc-900 border-l-4 border-red-500 rounded">
-                        <div class="text-xs text-red-400 font-bold uppercase mb-1">From: ${m.user} | ${m.time}</div>
-                        <div class="text-white text-sm italic">${m.text}</div>
-                    </div>
-                `;
-            });
-        }
-
-        // Wipe Data
-        function clearData() {
-            localStorage.removeItem('parosh_logs');
-            showLogs();
-        }
-    </script>
 </body>
 </html>
